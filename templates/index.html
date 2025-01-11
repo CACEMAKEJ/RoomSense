@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Monitor</title>
+	<script src="static/js/main.js"></script>
+    	<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.8.4.1.js"></script>
+
+</head>
+<body onload="keepAlive(); time()">
+	<main>
+		<h1>Sensors</h1>
+		<h3>Connection: <span id="connection_id">...</span></h3>
+		<h3>Temperature: <span id="temperature_id">...</span>°C</h3>
+	</main>
+    
+</body>
+</html>
