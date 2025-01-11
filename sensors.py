@@ -3,14 +3,14 @@ import time, threading
 import requests
 import json
 import adafruit_dht
+import digitalio
 import board
+import RPi.GPIO as GPIO
 from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory, PNOperationType
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub, SubscribeListener
-from dotenv import load_dotenv  # Import dotenv
 
-load_dotenv()
 
 
 # this will print out the subscription status to console
@@ -74,8 +74,10 @@ dht_device = adafruit_dht.DHT22(board.D4)
 
 alive = 0
 data = {}
+currentTemp = 15
 
 def temperatureCheck():
+    global currentTemp
     # Maximum number of retries for reading data
     MAX_RETRIES = 5
     while True:
@@ -91,6 +93,7 @@ def temperatureCheck():
                 if temperature_c is not None and humidity is not None:
                     # If values are successfully retrieved, print them
                     print("Temp: {:.1f} C Humidity: {:.1f}%".format(temperature_c, humidity))
+                    currentTemp = temperature_c
                     publish(my_channel, {"temperature": temperature_c})
                     success = True
                 else:
@@ -106,9 +109,25 @@ def temperatureCheck():
         # Wait before attempting the next reading
         time.sleep(5.0)
 
+
+# Define the LED pin using the board library
+led = digitalio.DigitalInOut(board.D16)  # Replace D18 with the appropriate GPIO pin
+led.direction = digitalio.Direction.OUTPUT
+
+def ledControl():
+	while True:
+		if (currentTemp > 26):
+			led.value = True  # Turn LED on
+		else:
+			led.value = False  # Turn LED off	
+
+
 if __name__ == '__main__':
-    sensorsThread = threading.Thread(target=temperatureCheck)
-    sensorsThread.start()
+    temperatureCheckThread = threading.Thread(target=temperatureCheck)
+    temperatureCheckThread.start()
+    ledThread = threading.Thread(target=ledControl)
+    ledThread.start()
+
     pubnub.add_listener(MySubscribeCallback())
     pubnub.subscribe().channels(my_channel).execute()
 

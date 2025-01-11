@@ -17,7 +17,6 @@ pubnub.addListener({
   },
   message: function (message) {
     var msg = message.message;
-    console.log(msg);
     document.getElementById("temperature_id").innerHTML = msg["temperature"];
   },
 });
