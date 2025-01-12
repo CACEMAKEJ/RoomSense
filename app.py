@@ -8,7 +8,17 @@ data = {}
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("landing.html")
+
+@app.route("/landing")
+def landing():
+    return render_template("landing.html")
+
+@app.route("/sensors")
+def sensors():
+    return render_template("sensors.html")
+
+
 
 
 @app.route("/keep_alive")
@@ -22,4 +32,4 @@ def keep_alive():
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port="5000")
+    app.run(host="127.0.0.1", port="5000", debug=True)
