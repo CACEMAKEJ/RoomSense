@@ -1,31 +1,71 @@
 {% extends "navbar.html" %} 
-{% block content %}        
+{% block content %}     
 
-<div class="d-flex p-3">
-  <div class="card card-cover h-50 w-25 overflow-hidden text-bg-dark rounded-4 shadow-lg">
-    <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-      <div class="d-flex flex-column" style="height: 150px;">
-        <h3 class="display-6 lh-1 fw-bold" id="temperature_container" style="display: none;">
-          <span id="temperature_id"></span>&deg;C
-        </h3>
-        <div id="spinner" class="spinner-border text-light" role="status">
-          <span class="visually-hidden">Loading...</span>
+
+
+<div class="row pt-5 align-items-center justify-content-center">
+  <div class="col-3">
+    <div class="mx-3 d-flex align-items-center justify-content-center my-3 card card-cover h-75 w-75 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+      <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+        <div class="d-flex flex-column" style="height: 150px;">
+          <h3 class="display-6 lh-1 fw-bold" id="connection_container">
+            <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+          <small>Connection: <span id="connection_id"></span></small>
+          </h3>
+      
         </div>
       </div>
-      
-      <ul class="d-flex list-unstyled mt-auto">
-        <li class="me-auto">
-          <img src="/static/images/thermometer.png" alt="Bootstrap" width="48" height="48" class="rounded-4 border border-white">
-        </li>
-        <li class="d-flex align-items-center me-3">
-          <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
-          <small>Room temperature</small>
-        </li>
-        <li class="d-flex align-items-center me-3">
-          <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
-          <small>Connection: <span id="connection_id"></span></small>
-        </li>
-      </ul>
+    </div>
+  </div>
+
+  <div class="col-4">
+    <div class="mx-3 my-3 card card-cover h-75 w-75 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+      <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+        <div class="d-flex flex-column" style="height: 150px;">
+          <h3 class="display-6 lh-1 fw-bold" id="temperature_container" style="display: none;">
+            <span id="temperature_id"></span>&deg;C
+          </h3>
+          <div id="temperature_spinner" class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        
+        <ul class="d-flex list-unstyled mt-auto">
+          <li class="me-auto">
+            <img src="/static/images/thermometer.png" alt="Bootstrap" width="48" height="48">
+          </li>
+          <li class="d-flex align-items-center me-3">
+            <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+            <small>Room temperature</small>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-4">
+    <div class="mx-3 my-3 card card-cover h-75 w-75 overflow-hidden text-bg-dark rounded-4 shadow-lg">
+      <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+        <div class="d-flex flex-column" style="height: 150px;">
+          <h3 class="display-6 lh-1 fw-bold" id="humidity_container" style="display: none;">
+            <span id="humidity_id"></span>%
+          </h3>
+          <div id="humidity_spinner" class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        
+        <ul class="d-flex list-unstyled mt-auto">
+          <li class="me-auto">
+            <img src="/static/images/humidity.png" alt="Bootstrap" width="48" height="48">
+          </li>
+          <li class="d-flex align-items-center me-3">
+            <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+            <small>Humidity</small>
+          </li> 
+        </ul>
+      </div>
     </div>
   </div>
 </div>

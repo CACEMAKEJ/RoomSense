@@ -17,14 +17,30 @@ pubnub.addListener({
   },
   message: function (message) {
     var msg = message.message;
+	console.log(message);
+	if (msg.hasOwnProperty("temperature")) {
+	document.getElementById("temperature_id").innerHTML = msg.temperature;
+	document.getElementById("temperature_spinner").style.display = "none";
+	document.getElementById("temperature_container").style.display = "block";
+	} else {
+	console.error("Invalid or missing temperature data");
+	}
 
-
-    document.getElementById("temperature_id").innerHTML = msg["temperature"];
-
-
-    document.getElementById("spinner").style.display = "none";
-    document.getElementById("temperature_container").style.display = "block";
-  },
+	if (msg.hasOwnProperty("humidity")) {
+    document.getElementById("humidity_id").innerHTML = msg.humidity;
+    document.getElementById("humidity_spinner").style.display = "none";
+    document.getElementById("humidity_container").style.display = "block";
+  } else {
+    console.error("Invalid or missing humidity data");
+  }
+	if (msg.hasOwnProperty("lightStatus")) {
+	document.getElementById("lightstatus_id").innerHTML = msg.lightstatus;
+	document.getElementById("lightstatus_spinner").style.display = "none";
+	document.getElementById("lightstatus_container").style.display = "block";
+	} else {
+	console.error("Invalid or missing light status data");
+	}
+},
 });
 pubnub.subscribe({
   channels: [myChannel],
