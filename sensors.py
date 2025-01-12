@@ -6,11 +6,14 @@ import adafruit_dht
 import digitalio
 import board
 import RPi.GPIO as GPIO
+from datetime import datetime
 from dotenv import load_dotenv
 from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory, PNOperationType
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub, SubscribeListener
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 
 load_dotenv()
 
@@ -29,9 +32,19 @@ config.enable_subscribe = True
 config.daemon = True
 config.uuid = USER_ID
 
-print(f"SUBSCRIBE_KEY: {SUBSCRIBE_KEY}")
-print(f"PUBLISH_KEY: {PUBLISH_KEY}")
-print(f"USER_ID: {USER_ID}")
+uri = os.getenv('MONGODB_URI')
+client = MongoClient(uri, server_api=ServerApi('1'))
+db = client.roomtemp
+
+temperatureCollection = db["temperatures"]
+humidityCollection = db["humidities"]
+
+# Send a ping to confirm a successful connection
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
 
 my_channel = "RoomTemp"
 sensorList = ["DHT"]
@@ -61,11 +74,23 @@ class MySubscribeCallback(SubscribeCallback):
     def message(self, pubnub, message):
         print(message.message)
         received = message.message
-        if "temperature" in received.keys():
+        current_time = datetime.now()
+        if "temperature" in received:
             if received["temperature"]:
-                data["temperature"] = received["temperature"]
-            else:
-                print("no data")
+                insertTemp = {
+                  "Temperature" : received["temperature"],
+                  "Time" : current_time
+                }
+                temperatureCollection.insert_one(insertTemp)
+        if "humidity" in received:
+            if received["humidity"]:
+                insertHumidity = {
+                    "Humidity" : received["humidity"],
+                    "Time" : current_time
+                }
+                humidityCollection.insert_one(insertHumidity)
+        else:
+            print("no data")
 
 
 pubnub.subscribe().channels(my_channel).execute()
@@ -76,7 +101,6 @@ def publish(channel, message):
 dht_device = adafruit_dht.DHT22(board.D4)
 
 alive = 0
-data = {}
 currentTemp = 15
 
 def temperatureCheck():
@@ -95,6 +119,7 @@ def temperatureCheck():
                     print("Temp: {:.1f} C Humidity: {:.1f}%".format(temperature_c, humidity))
                     currentTemp = temperature_c
                     publish(my_channel, {"temperature": temperature_c, "humidity" : humidity})
+
                     success = True
                 else:
                     retries += 1
