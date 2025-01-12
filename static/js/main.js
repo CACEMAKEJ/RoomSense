@@ -17,10 +17,15 @@ pubnub.addListener({
   },
   message: function (message) {
     var msg = message.message;
+
+
     document.getElementById("temperature_id").innerHTML = msg["temperature"];
+
+
+    document.getElementById("spinner").style.display = "none";
+    document.getElementById("temperature_container").style.display = "block";
   },
 });
-
 pubnub.subscribe({
   channels: [myChannel],
 });
@@ -36,14 +41,13 @@ function time() {
   let d = new Date();
   let currentSecond = d.getTime();
   if (currentSecond - aliveSecond > heartbeatRate + 1000) {
-    document.getElementById("connection_id").innerHTML = "DEAD!!!!";
+    document.getElementById("connection_id").innerHTML = "&#10007;";
   } else {
-    document.getElementById("connection_id").innerHTML = "Alive";
+    document.getElementById("connection_id").innerHTML = "&#10003;";
   }
   setTimeout(time, 1000);
 }
-
-document.getElementById("temperature_id").innerHTML = "...";
+ 
 
 function keepAlive() {
   fetch("/keep_alive")
