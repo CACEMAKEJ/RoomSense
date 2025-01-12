@@ -170,3 +170,6 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+RoomSenseKeys.ppk
+RoomSenseKeys (1).ppk
+RoomSenseKeys.pem

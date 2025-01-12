@@ -1,0 +1,45 @@
+{% extends "navbar.html" %}
+{% block content %}
+
+<div class="row mx-3 my-3" style="overflow-x: hidden;">
+    <div class="col-3">
+        <h2>Temperature</h2>
+            <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Temperature</th>
+                    <th scope="col">Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for temperature in temperatures %}
+                <tr>
+                    <td>{{temperature.Temperature}}</td>
+                    <td>{{temperature.Time}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-3">
+    <h2>Humidity</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Humidity</th>
+                <th scope="col">Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for humidity in humidities %}
+            <tr>
+                <td>{{humidity.Humidity}}</td>
+                <td>{{humidity.Time}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
